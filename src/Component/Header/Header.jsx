@@ -3,15 +3,15 @@ import { Link, useLocation } from 'react-router-dom';
 import { auth } from '../../FirebaseConfigue';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import Search from '../Search/Search';
+import { PiShoppingCartSimpleLight } from "react-icons/pi";
 
 const Header = () => {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const isHomePage = location.pathname === "/Home" || location.pathname === "/";
+  const isHomePage = location.pathname === "/" || location.pathname === "/Home";
 
   useEffect(() => {
-    // Check authentication state
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
     });
@@ -32,60 +32,68 @@ const Header = () => {
   };
 
   return (
-    <header className={`bg-slate-800 text-white rounded-md shadow-md ${isMenuOpen ? 'h-auto' : 'h-16'} flex flex-col md:flex-row items-center`}>
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center w-full">
-        <Link to="/" className="text-lg font-bold tracking-wide">
+    <header className="bg-slate-800 text-white shadow-md">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <Link to="/" className="text-2xl font-bold tracking-wide">
           SFG
         </Link>
 
         {!isHomePage && (
-          <div className="flex-grow md:flex-grow-0 md:w-1/3">
+          <div className="flex-grow md:flex-grow-0 md:w-1/3 hidden md:block">
             <Search />
           </div>
         )}
 
-        <button
-          className="md:hidden text-gray-300 hover:text-white focus:outline-none transition duration-200 ease-in-out"
-          onClick={toggleMenu}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-      </div>
+        <div className="md:hidden">
+          <button
+            className="text-gray-300 hover:text-white focus:outline-none"
+            onClick={toggleMenu}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
 
-      <div className={`md:flex ${isMenuOpen ? 'flex' : 'hidden'} flex-col md:flex-row md:items-center w-full`}>
-        <nav className="flex flex-col md:flex-row md:space-x-6 w-full">
-          <Link to="/Home" className="text-gray-300 hover:text-white transition duration-200 ease-in-out py-2 px-4">
+        <nav className={`md:flex ${isMenuOpen ? 'block' : 'hidden'} md:flex-row md:items-center md:space-x-6`}>
+          <Link to="/Home" className={`py-2 px-4 text-gray-300 hover:text-white transition duration-200 ease-in-out ${isHomePage ? 'font-bold' : ''}`}>
             Home
           </Link>
-          <Link to="/products" className="text-gray-300 hover:text-white transition duration-200 ease-in-out py-2 px-4">
+          <Link to="/products" className="py-2 px-4 text-gray-300 hover:text-white transition duration-200 ease-in-out">
             Products
           </Link>
-          <Link to="/Cart" className="text-gray-300 hover:text-white transition duration-200 ease-in-out py-2 px-4">
-            Cart
+          <Link
+            to="/Cart"
+            className="py-2 px-4 text-gray-300 hover:text-white transition duration-200 ease-in-out h-16 w-16 flex items-center justify-center"
+          >
+            <PiShoppingCartSimpleLight className="h-6 w-6" />
           </Link>
-          {user && (
+
+          {user ? (
             <button
-              className="text-gray-300 hover:text-white transition duration-200 ease-in-out py-2 px-4"
+              className="py-2 px-4 text-gray-300 hover:text-white transition duration-200 ease-in-out"
               onClick={handleLogout}
             >
               Logout
             </button>
+          ) : (
+            <>
+              <Link to="/Login" className="py-2 px-4 text-gray-300 hover:text-white transition duration-200 ease-in-out">
+                Login
+              </Link>
+              <Link to="/Signin" className="py-2 px-4 text-gray-300 hover:text-white transition duration-200 ease-in-out">
+                Sign In
+              </Link>
+            </>
           )}
         </nav>
-
-        {!user && (
-          <div className="flex flex-col md:flex-row md:space-x-6 items-start md:items-center w-full">
-            <Link to="/Login" className="text-gray-300 hover:text-white transition duration-200 ease-in-out py-2 px-4">
-              Login
-            </Link>
-            <Link to="/Signin" className="text-gray-300 hover:text-white transition duration-200 ease-in-out py-2 px-4">
-              Sign In
-            </Link>
-          </div>
-        )}
       </div>
+
+      {!isHomePage && isMenuOpen && (
+        <div className="px-4 py-4 md:hidden">
+          <Search />
+        </div>
+      )}
     </header>
   );
 };

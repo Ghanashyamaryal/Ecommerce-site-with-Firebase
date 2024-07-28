@@ -37,7 +37,7 @@ const Search = () => {
   }
 
   return (
-    <div className="relative flex justify-center ">
+    <div className="relative flex justify-center m-2">
       <div className="relative w-full max-w-md">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <FiSearch className="text-gray-700" size={18} />

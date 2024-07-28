@@ -1,8 +1,9 @@
 import React from 'react';
-import AllProduct from '../../Pages/AllProduct';
 import Search from '../Search/Search';
 import TestimonialSection from './customermsg';
-import NewForYou from './Newforyou';
+import BestSellerSection from './BestSellerSection';
+import NewForYouSection from './NewForYouSection';
+import TopRatedSection from './TopRatedSection';
 
 const Home = () => {
   return (
@@ -23,7 +24,9 @@ const Home = () => {
         </div>
       </div>
       <div className="container mx-auto p-4">
-        <NewForYou />
+        <BestSellerSection />
+        <TopRatedSection />
+        <NewForYouSection />
         <TestimonialSection />
       </div>
     </>
